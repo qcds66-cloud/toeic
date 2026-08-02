@@ -36,7 +36,7 @@ st.markdown("""
 
     /* 獨立設定：英文單字 (放大 25%，從 2.5rem 改為 3.125rem) */
     .main-word {
-        font-size: 2.5rem;
+        font-size: 3.125rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
@@ -50,22 +50,25 @@ st.markdown("""
         margin-bottom: 10px !important;
     }
 
-    /* 獨立設定：詞性 (n., v. 等) */
-    .pos-text {
-        font-size: 0.95rem;
-        color: #B0BEC5;
-        text-align: center;
-        margin-bottom: 5px !important;
-    }
-
-    /* 獨立設定：中文意思 (放大 25%，從 1.8rem 改為 2.25rem) */
-    .mean-text {
-        font-size: 2.0rem;
-        font-weight: bold;
-        color: #FFAB91;
+    /* 獨立設定：中文意思與詞性區塊 (放大 25%，從 1.8rem 改為 2.25rem) */
+    .mean-container {
         text-align: center;
         margin-bottom: 4px !important;
         line-height: 1.1;
+    }
+
+    .mean-text {
+        font-size: 2.25rem;
+        font-weight: bold;
+        color: #FFAB91;
+        display: inline;
+    }
+
+    .pos-inline {
+        font-size: 1.5rem;
+        color: #B0BEC5;
+        display: inline;
+        margin-left: 10px;
     }
 
     /* 獨立設定：例句與翻譯區塊 (放大 25%，從 0.85rem 改為 1.0625rem) */
@@ -75,14 +78,14 @@ st.markdown("""
         border-radius: 6px;
         text-align: left;
         color: #CFD8DC;
-        font-size: 0.9rem;
+        font-size: 1.0625rem;
         margin-bottom: 4px !important;
         line-height: 1.15;
     }
 
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
-        width: 200%;
+        width: 100%;
         height: 3.0rem;
         font-size: 2.7rem;
         font-weight: bold;
@@ -109,7 +112,7 @@ st.markdown("""
         color: #000000 !important;
         width: 300% !important;
         height: 2.4rem !important;
-        font-size: 1.2rem !important;
+        font-size: 1.1rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -1012,7 +1015,7 @@ verb_db = [
     ["879", "prominent", "(adj.)", "顯著的;重要的;卓越的", "She is a prominent speaker at the international business forum.", "她是國際商業論壇的知名講者。"],
     ["880", "prospective", "(adj.)", "可能的;潛在的", "There were many prospective buyers at the home showing.", "看屋時有很多潛在買家。"],
     ["881", "comprehensive", "(adj.)", "詳盡的;全面的", "The report provides a comprehensive analysis of the market.", "此份報告對於市場提供了全面的分析。"],
-    ["882", "imperative", "(adj.)", "極重要的;迫切的", "Following safety protocols is imperative in the workplace.", "遵守安全規範在工作場所是必須的。"],
+    ["882", "imperative", "(adj.)", "極重要的;迫切的", "Following safety protocols is imperative in the workplace.", "遵守安全規範在工作場所有必要性。"],
     ["883", "dormant", "(adj.)", "休眠的;暫停活動的", "The dormant business account has not been used since 2019.", "這個休眠的商業帳戶自2019年以來就未被使用。"],
     ["884", "established", "(adj.)", "有聲望的", "She has become an established entrepreneur.", "她成為了一名頗有聲望的企業家。"],
     ["885", "prestigious", "(adj.)", "具聲望的", "The university has a prestigious business program.", "這所大學有聲譽卓著的商管學程。"],
@@ -1190,10 +1193,15 @@ if st.session_state.play_word_audio:
     if audio_bytes:
         st.audio(audio_bytes, format='audio/mp3', autoplay=True)
 
-# 答案內容
+# 答案內容（中文意思與詞性放在同一行顯示）
 if st.session_state.show_answer:
-    st.markdown(f'<div class="pos-text">{pos}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="mean-text">{mean}</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+        <div class="mean-container">
+            <span class="mean-text">{mean}</span>
+            <span class="pos-inline">{pos}</span>
+        </div>
+    """, unsafe_allow_html=True)
+    
     st.markdown(f"""
         <div class="sentence-box">
             <b>例句：</b>{sen_en}<br>
