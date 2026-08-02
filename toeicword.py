@@ -83,8 +83,8 @@ st.markdown("""
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
         width: 300%;
-        height: 2.4rem;
-        font-size: 2.5rem;
+        height: 3.0rem;
+        font-size: 2.7rem;
         font-weight: bold;
         border-radius: 10px;
         padding: 5px;
