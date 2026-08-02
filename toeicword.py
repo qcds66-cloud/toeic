@@ -1,54 +1,77 @@
 import streamlit as st
-import os
 from gtts import gTTS
 from io import BytesIO
 
-# --- 1. 頁面基本設定 ---
+# --- 1. 頁面基本設定 (使用 wide 模式以增加手機排版彈性) ---
 st.set_page_config(
-    page_title="單字學習程式",
+    page_title="英語單字學習程式",
     page_icon="📚",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. 自訂 CSS 樣式 (針對手機與平板優化) ---
+# --- 2. 自訂 CSS 樣式 (針對手機螢幕全面緊湊優化、縮小 50% 間距) ---
 st.markdown("""
     <style>
+    /* 移除 Streamlit 預設過多的上下留白 */
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* 緊湊標題與文字間距 */
     .main-word {
-        font-size: 3rem;
+        font-size: 2.2rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
-        margin-bottom: 0px;
+        margin-bottom: 2px !important;
+        line-height: 1.1;
     }
     .pos-text {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         color: #B0BEC5;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 5px !important;
     }
     .mean-text {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: bold;
         color: #FFAB91;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 8px !important;
+        line-height: 1.2;
     }
     .sentence-box {
         background-color: #1E1E1E;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
+        padding: 10px 12px;
+        border-radius: 8px;
+        text-align: left;
         color: #CFD8DC;
-        font-size: 1.2rem;
-        margin-bottom: 20px;
+        font-size: 0.95rem;
+        margin-bottom: 10px !important;
+        line-height: 1.3;
     }
+    
+    /* 按鈕大小與間距調整，確保在同一行且不超出手機畫面 */
     .stButton>button {
         width: 100%;
-        height: 3.2em;
-        font-size: 1.2rem;
+        height: 2.5em;
+        font-size: 1rem;
         font-weight: bold;
-        border-radius: 8px;
+        border-radius: 6px;
+        padding: 0px;
+    }
+    
+    /* 縮小輸入框與上方資訊的間距 */
+    div.stNumberInput {
+        margin-bottom: -10px !important;
+    }
+    
+    hr {
+        margin: 8px 0px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -167,7 +190,7 @@ if 'show_answer' not in st.session_state:
 if 'start_no' not in st.session_state:
     st.session_state.start_no = 1
 
-# --- 5. 語音生成函數 (轉為 bytes 供自動播放) ---
+# --- 5. 語音生成函數 ---
 def get_audio_bytes(text):
     try:
         tts = gTTS(text=text, lang='en')
@@ -179,54 +202,52 @@ def get_audio_bytes(text):
         return None
 
 # --- 6. 介面佈局 ---
-st.title("📚 英語單字隨身背")
-st.markdown("---")
+st.markdown("### 📚 英語單字隨身背")
 
-# 設定起始編號與控制面板
-col1, col2 = st.columns([2, 1])
-with col1:
-    start_input = st.number_input("輸入起始單字編號：", min_value=1, max_value=len(verb_db), value=st.session_state.start_no)
-with col2:
-    st.write("")
-    st.write("")
+# 緊湊型設定面板（將輸入框與按鈕並排，節省垂直空間）
+col_s1, col_s2 = st.columns([2, 1])
+with col_s1:
+    start_input = st.number_input("起始編號：", min_value=1, max_value=len(verb_db), value=st.session_state.start_no, label_visibility="collapsed")
+with col_s2:
     if st.button("設定/重置"):
         st.session_state.index = int(start_input) - 1
         st.session_state.start_no = int(start_input)
         st.session_state.show_answer = False
         st.rerun()
 
+st.markdown("---")
+
 # 取得當前單字資料
 current_data = verb_db[st.session_state.index]
 no, word, pos, mean, sen_en, sen_zh = current_data
 
 # 進度顯示
-st.markdown(f"**目前進度：第 {no} 筆 / 共 {len(verb_db)} 筆**")
+st.markdown(f"**進度：{no} / {len(verb_db)} 筆**")
 
-# 顯示英文單字
+# 單字與發音
 st.markdown(f'<div class="main-word">{word}</div>', unsafe_allow_html=True)
 
-# 🔊 自動朗讀單字 (加入 autoplay=True 屬性)
 audio_bytes = get_audio_bytes(word)
 if audio_bytes:
     st.audio(audio_bytes, format='audio/mp3', autoplay=True)
 
-# 顯示答案區塊
+# 顯示答案區塊 (內容緊湊化)
 if st.session_state.show_answer:
     st.markdown(f'<div class="pos-text">{pos}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="mean-text">{mean}</div>', unsafe_allow_html=True)
     st.markdown(f"""
         <div class="sentence-box">
-            <b>英文例句：</b><br>{sen_en}<br><br>
-            <b>中文翻譯：</b><br>{sen_zh}
+            <b>例句：</b>{sen_en}<br>
+            <b>翻譯：</b>{sen_zh}
         </div>
     """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-# 按鈕互動區塊 (手機友好的滿版按鈕排列)
-c1, c2 = st.columns(2)
+# 📥 將「上一題」與「下一題」或「顯示答案」按鈕安排在同一行
+col_btn1, col_btn2 = st.columns(2)
 
-with c1:
+with col_btn1:
     if not st.session_state.show_answer:
         if st.button("👁️ 顯示答案", type="primary"):
             st.session_state.show_answer = True
@@ -238,12 +259,18 @@ with c1:
                 st.session_state.show_answer = False
                 st.rerun()
 
-with c2:
-    if st.session_state.show_answer:
+with col_btn2:
+    if not st.session_state.show_answer:
+        if st.button("➡️ 下一題"):
+            if st.session_state.index < len(verb_db) - 1:
+                st.session_state.index += 1
+                st.session_state.show_answer = False
+                st.rerun()
+    else:
         if st.button("➡️ 下一題", type="primary"):
             if st.session_state.index < len(verb_db) - 1:
                 st.session_state.index += 1
                 st.session_state.show_answer = False
                 st.rerun()
             else:
-                st.success("🎉 恭喜你已經複習完所有單字！")
+                st.success("🎉 複習完畢！")
