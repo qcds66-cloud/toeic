@@ -10,70 +10,88 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. 自訂 CSS 樣式 (固定版面高度與內容區域，避免上下跳動) ---
+# --- 2. 自訂 CSS 樣式 (各行字體大小與間距皆可獨立設定，確保手機單一畫面完整顯示) ---
 st.markdown("""
     <style>
     .block-container {
-        padding-top: 0.5rem !important;
-        padding-bottom: 0.5rem !important;
-        padding-left: 0.8rem !important;
-        padding-right: 0.8rem !important;
+        padding-top: 0.2rem !important;
+        padding-bottom: 0.2rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
     }
     
-    /* 建立固定高度的顯示容器，確保切換答案時上方文字位置絕對不變 */
-    .fixed-display-container {
-        min-height: 380px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+    /* 頂部跳轉控制區微調 */
+    div.stNumberInput, div.stButton {
+        margin-bottom: -15px !important;
     }
 
+    /* 獨立設定：進度顯示 */
+    .progress-text {
+        font-size: 0.9rem;
+        color: #90A4AE;
+        text-align: center;
+        margin-top: 2px !important;
+        margin-bottom: 4px !important;
+    }
+
+    /* 獨立設定：英文單字 */
     .main-word {
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
         margin-bottom: 0px !important;
         line-height: 1.1;
     }
+
+    /* 獨立設定：語音播放條上下的間距縮小，使內容緊湊 */
     .audio-spacing {
-        margin-top: 24px !important;
-        margin-bottom: 12px !important;
+        margin-top: 8px !important;
+        margin-bottom: 6px !important;
     }
+
+    /* 獨立設定：詞性 (n., v. 等) */
     .pos-text {
-        font-size: 1rem;
+        font-size: 0.95rem;
         color: #B0BEC5;
         text-align: center;
-        margin-bottom: 3px !important;
+        margin-bottom: 2px !important;
     }
+
+    /* 獨立設定：中文意思 */
     .mean-text {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         font-weight: bold;
         color: #FFAB91;
         text-align: center;
-        margin-bottom: 5px !important;
-        line-height: 1.2;
+        margin-bottom: 4px !important;
+        line-height: 1.1;
     }
+
+    /* 獨立設定：例句與翻譯區塊 */
     .sentence-box {
         background-color: #1E1E1E;
-        padding: 8px 10px;
+        padding: 6px 8px;
         border-radius: 6px;
         text-align: left;
         color: #CFD8DC;
-        font-size: 0.9rem;
-        margin-bottom: 6px !important;
-        line-height: 1.2;
+        font-size: 0.85rem;
+        margin-bottom: 4px !important;
+        line-height: 1.15;
     }
+
+    /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
         width: 100%;
-        height: 3.2em;
-        font-size: 1.1rem;
+        height: 2.8em;
+        font-size: 1rem;
         font-weight: bold;
-        border-radius: 8px;
+        border-radius: 6px;
         padding: 0px;
     }
+
     hr {
-        margin: 5px 0px !important;
+        margin: 3px 0px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -209,7 +227,7 @@ col_s1, col_s2, col_s3 = st.columns([2, 2, 1])
 with col_s1:
     start_input = st.number_input("跳至編號：", min_value=1, max_value=max_len, value=current_val)
 with col_s2:
-    st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
     if st.button("跳轉"):
         st.session_state.index = int(start_input) - 1
         st.session_state.show_answer = False
@@ -222,19 +240,19 @@ st.markdown("---")
 current_data = verb_db[st.session_state.index]
 no, word, pos, mean, sen_en, sen_zh = current_data
 
-st.markdown(f"**進度：{no} / {max_len} 筆**")
+# 進度顯示（獨立參數調整過高度與字體）
+st.markdown(f'<div class="progress-text">進度：{no} / {max_len} 筆</div>', unsafe_allow_html=True)
 
-# 使用固定容器包覆主要內容，防止答案展開時把上方元素推移位
-st.markdown('<div class="fixed-display-container">', unsafe_allow_html=True)
-
+# 英文單字顯示
 st.markdown(f'<div class="main-word">{word}</div>', unsafe_allow_html=True)
 
+# 語音播放條與單字間距（已拉近並精準控制）
 st.markdown('<div class="audio-spacing"></div>', unsafe_allow_html=True)
-
 audio_bytes = get_audio_bytes(word)
 if audio_bytes:
     st.audio(audio_bytes, format='audio/mp3', autoplay=True)
 
+# 答案內容（詞性、意思、例句各自獨立參數控制，維持同一畫面不超出）
 if st.session_state.show_answer:
     st.markdown(f'<div class="pos-text">{pos}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="mean-text">{mean}</div>', unsafe_allow_html=True)
@@ -245,11 +263,9 @@ if st.session_state.show_answer:
         </div>
     """, unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True) # 結束固定容器
-
 st.markdown("---")
 
-# 底部按鍵：固定位置，置中並加大尺寸
+# 底部按鍵：置中、加大、固定版面
 if not st.session_state.show_answer:
     col_empty1, col_center, col_empty2 = st.columns([1, 4, 1])
     with col_center:
