@@ -36,7 +36,7 @@ st.markdown("""
 
     /* 獨立設定：英文單字 */
     .main-word {
-        font-size: 2.0rem;
+        font-size: 2.5rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
