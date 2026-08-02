@@ -244,7 +244,7 @@ verb_db = [
     ["144", "typical", "(adj.)", "典型的", "Typical symptoms include headaches, vomiting, and dizziness.", "典型的症狀包括頭痛、嘔吐和眩暈。"],
     ["145", "limited", "(adj.)", "有限的;限定的", "The company has limited resources to invest in new projects.", "公司能用來投資新項目的資源有限。"],
     ["146", "physical", "(adj.)", "身體的;生理的", "Regular exercise is important for maintaining physical health.", "經常運動對保持身體健康很重要。"],
-    ["147", "annual", "(adj.)", "一年一次的;每年的", "Our company is having the annual end-of-year party today.", "我們公司今天要舉行一年一度的年終晚會。"],
+    ["147", "annual", "(adj.)", "一年一度的;每年的", "Our company is having the annual end-of-year party today.", "我們公司今天要舉行一年一度的年終晚會。"],
     ["148", "frequent", "(adj.)", "頻繁的", "He travels to New York on frequent business trips.", "他經常去紐約出差。"],
     ["149", "various", "(adj.)", "各式各樣的;多種多樣的", "The hat is available in various colors.", "這頂帽子有各式各樣的顏色可供選擇。"],
     ["150", "suitable", "(adj.)", "合適的", "This movie is not suitable for children.", "這部電影不適宜兒童觀看。"],
@@ -739,7 +739,7 @@ verb_db = [
     ["638", "understaffed", "(adj.)", "人力不足的", "The hospital was severely understaffed during flu season.", "在流感季期間,醫院人力嚴重不足。"],
     ["639", "consistent", "(adj.)", "一致的;一貫的", "We need to see consistent results throughout the year.", "我們需要全年都看到穩定的成果。"],
     ["640", "mandatory", "(adj.)", "強制的;法定的", "Wearing a helmet is mandatory for all cyclists.", "所有自行車騎士都必須戴頭盔。"],
-    ["641", "precise", "(adj.)", "精確的;嚴謹的", "Please provide me with precise measurements for the project.", "請提供我該專案的精確測量。"],
+    ["641", "precise", "(adj.)", "精確的;嚴謹的", "Please provide me with precise measurements for the project.", "請 provide 我該專案的精確測量。"],
     ["642", "authentic", "(adj.)", "正宗的;真正的", "The artwork is an authentic piece from the Renaissance period.", "這件藝術品是文藝復興時期的真品。"],
     ["643", "accurate", "(adj.)", "準確的;精確的", "The accountants made sure the figures were accurate.", "會計師確保數字準確無誤。"],
     ["644", "confidential", "(adj.)", "機密的", "The financial report contains highly confidential company information.", "這份財務報告包含高度機密的公司資訊。"],
@@ -924,7 +924,7 @@ verb_db = [
     ["823", "globalization", "(n.)", "全球化", "Globalization has transformed how companies conduct international business operations.", "全球化改變了企業進行國際商業營運的方式。"],
     ["824", "infrastructure", "(n.)", "基礎設施;基礎建設", "The city needs to upgrade its aging infrastructure.", "這座城市需要更新其老化的基礎設施。"],
     ["825", "procurement", "(n.)", "採購;取得", "The procurement department negotiated better prices with suppliers.", "採購部門與供應商協商取得了更優惠的價格。"],
-    ["826", "legislation", "(n.)", "立法", "The legislation aims to protect the rights of workers.", "這項立法旨在保護工人的權利。"],
+    ["826", "legislation", "(n.)", "立法", "The legislation aims to protect the rights of workers.", "這項 legislation 旨在保護工人的權利。"],
     ["827", "conglomerate", "(n.)", "企業集團;聯合大型企業", "The conglomerate acquired three smaller manufacturing companies.", "這家企業集團收購了三家較小的製造公司。"],
     ["828", "prototype", "(n.)", "原型", "The engineers developed a prototype for the new device.", "工程師們開發了這個新裝置的原型。"],
     ["829", "turnover", "(n.)", "員工流動率;營業額", "The company experienced high employee turnover last quarter.", "公司在上一季度經歷了高員工流動率。"],
@@ -1098,7 +1098,6 @@ verb_db = [
     ["997", "institute", "(v.)", "制定,建立(n.)協會;學院", "I instituted additional controls to ensure accurate results.", "為了確保準確的結果,我制定了額外的控制措施。"],
     ["998", "attribute", "(v.)", "歸因於(n.)特性,特質", "He attributed the company's success to the employees.", "他將公司的成功歸功於員工。"],
     ["999", "debrief", "(v.)", "匯報;總結檢討(n.)匯報;總結檢討", "The manager debriefed his team after the client meeting.", "經理在客戶會議結束後向團隊進行工作匯報。"]
-
 ]
 
 # --- 4. 初始化 Session State ---
@@ -1139,19 +1138,19 @@ st.markdown("---")
 current_data = verb_db[st.session_state.index]
 no, word, pos, mean, sen_en, sen_zh = current_data
 
-# 進度顯示（獨立參數調整過高度與字體）
+# 進度顯示
 st.markdown(f'<div class="progress-text">進度：{no} / {max_len} 筆</div>', unsafe_allow_html=True)
 
 # 英文單字顯示
 st.markdown(f'<div class="main-word">{word}</div>', unsafe_allow_html=True)
 
-# 語音播放條與單字間距（已拉近並精準控制）
+# 語音播放條與單字間距
 st.markdown('<div class="audio-spacing"></div>', unsafe_allow_html=True)
 audio_bytes = get_audio_bytes(word)
 if audio_bytes:
     st.audio(audio_bytes, format='audio/mp3', autoplay=True)
 
-# 答案內容（詞性、意思、例句各自獨立參數控制，維持同一畫面不超出）
+# 答案內容
 if st.session_state.show_answer:
     st.markdown(f'<div class="pos-text">{pos}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="mean-text">{mean}</div>', unsafe_allow_html=True)
@@ -1161,10 +1160,15 @@ if st.session_state.show_answer:
             <b>翻譯：</b>{sen_zh}
         </div>
     """, unsafe_allow_html=True)
+    
+    # 顯示答案後額外朗讀例句
+    sen_audio_bytes = get_audio_bytes(sen_en)
+    if sen_audio_bytes:
+        st.audio(sen_audio_bytes, format='audio/mp3', autoplay=True)
 
 st.markdown("---")
 
-# 底部按鍵：置中、加大、固定版面
+# 底部按鍵
 if not st.session_state.show_answer:
     col_empty1, col_center, col_empty2 = st.columns([1, 4, 1])
     with col_center:
