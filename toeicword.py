@@ -20,7 +20,7 @@ st.markdown("""
         padding-right: 0.4rem !important;
     }
     
-    /* 頂部跳轉控制區微調 */
+    /* 頂部控制區微調 */
     div.stNumberInput, div.stButton {
         margin-bottom: -15px !important;
     }
@@ -739,7 +739,7 @@ verb_db = [
     ["638", "understaffed", "(adj.)", "人力不足的", "The hospital was severely understaffed during flu season.", "在流感季期間,醫院人力嚴重不足。"],
     ["639", "consistent", "(adj.)", "一致的;一貫的", "We need to see consistent results throughout the year.", "我們需要全年都看到穩定的成果。"],
     ["640", "mandatory", "(adj.)", "強制的;法定的", "Wearing a helmet is mandatory for all cyclists.", "所有自行車騎士都必須戴頭盔。"],
-    ["641", "precise", "(adj.)", "精確的;嚴謹的", "Please provide me with precise measurements for the project.", "請 provide 我該專案的精確測量。"],
+    ["641", "precise", "(adj.)", "精確的;嚴謹的", "Please provide me with precise measurements for the project.", "請提供我該專案的精確測量。"],
     ["642", "authentic", "(adj.)", "正宗的;真正的", "The artwork is an authentic piece from the Renaissance period.", "這件藝術品是文藝復興時期的真品。"],
     ["643", "accurate", "(adj.)", "準確的;精確的", "The accountants made sure the figures were accurate.", "會計師確保數字準確無誤。"],
     ["644", "confidential", "(adj.)", "機密的", "The financial report contains highly confidential company information.", "這份財務報告包含高度機密的公司資訊。"],
@@ -1041,7 +1041,7 @@ verb_db = [
     ["940", "entitle", "(v.)", "給予權利", "The ticket entitles you to access all areas of the museum.", "這張門票使您能夠參觀博物館的所有區域。"],
     ["941", "foster", "(v.)", "促進;培養", "I'd like to foster an interest in arts in my children.", "我想培養我的孩子們對藝術的興趣。"],
     ["942", "utilize", "(v.)", "利用;使用", "You should utilize your strengths to achieve success.", "你應該善用優勢以取得成功。"],
-    ["943", "consolidate", "(v.)", "合併;鞏固", "The company plans to consolidate its regional offices.", "該公司計劃合併其區域辦事處。"],
+    ["943", "consolidate", "(v.)", "合併;鞏固", "The company plans to consolidate its regional offices.", "該公司 plans to consolidate 區域辦事處。"],
     ["944", "troubleshoot", "(v.)", "疑難排解;排除故障;解決問題", "The IT team will troubleshoot the network issues.", "資訊技術團隊將排除網路問題。"],
     ["945", "economize", "(v.)", "節省;節約", "Companies are trying to economize by not hiring new staff.", "許多公司正試圖藉由不僱用新員工來節省開銷。"],
     ["946", "surpass", "(v.)", "超過;勝過", "Her achievements surpass those of her peers.", "她的成就比同儕都還高。"],
@@ -1105,6 +1105,10 @@ if 'index' not in st.session_state:
     st.session_state.index = 0
 if 'show_answer' not in st.session_state:
     st.session_state.show_answer = False
+if 'play_word_audio' not in st.session_state:
+    st.session_state.play_word_audio = True
+if 'play_sentence_audio' not in st.session_state:
+    st.session_state.play_sentence_audio = True
 
 # --- 5. 語音生成函數 ---
 def get_audio_bytes(text):
@@ -1121,7 +1125,8 @@ def get_audio_bytes(text):
 max_len = len(verb_db)
 current_val = min(st.session_state.index + 1, max_len)
 
-col_s1, col_s2, col_s3 = st.columns([2, 2, 1])
+# 頂部控制區：跳轉與朗讀開關設定列
+col_s1, col_s2, col_s3, col_s4 = st.columns([1.5, 1, 1.2, 1.2])
 with col_s1:
     start_input = st.number_input("跳至編號：", min_value=1, max_value=max_len, value=current_val)
 with col_s2:
@@ -1131,7 +1136,9 @@ with col_s2:
         st.session_state.show_answer = False
         st.rerun()
 with col_s3:
-    pass
+    st.session_state.play_word_audio = st.checkbox("朗讀單字", value=st.session_state.play_word_audio)
+with col_s4:
+    st.session_state.play_sentence_audio = st.checkbox("朗讀例句", value=st.session_state.play_sentence_audio)
 
 st.markdown("---")
 
@@ -1144,11 +1151,12 @@ st.markdown(f'<div class="progress-text">進度：{no} / {max_len} 筆</div>', u
 # 英文單字顯示
 st.markdown(f'<div class="main-word">{word}</div>', unsafe_allow_html=True)
 
-# 語音播放條與單字間距
+# 語音播放條與單字間距（根據設定決定是否朗讀單字）
 st.markdown('<div class="audio-spacing"></div>', unsafe_allow_html=True)
-audio_bytes = get_audio_bytes(word)
-if audio_bytes:
-    st.audio(audio_bytes, format='audio/mp3', autoplay=True)
+if st.session_state.play_word_audio:
+    audio_bytes = get_audio_bytes(word)
+    if audio_bytes:
+        st.audio(audio_bytes, format='audio/mp3', autoplay=True)
 
 # 答案內容
 if st.session_state.show_answer:
@@ -1161,10 +1169,11 @@ if st.session_state.show_answer:
         </div>
     """, unsafe_allow_html=True)
     
-    # 顯示答案後額外朗讀例句
-    sen_audio_bytes = get_audio_bytes(sen_en)
-    if sen_audio_bytes:
-        st.audio(sen_audio_bytes, format='audio/mp3', autoplay=True)
+    # 根據設定決定是否朗讀例句
+    if st.session_state.play_sentence_audio:
+        sen_audio_bytes = get_audio_bytes(sen_en)
+        if sen_audio_bytes:
+            st.audio(sen_audio_bytes, format='audio/mp3', autoplay=True)
 
 st.markdown("---")
 
