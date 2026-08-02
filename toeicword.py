@@ -4,7 +4,7 @@ from io import BytesIO
 
 # --- 1. 頁面基本設定 ---
 st.set_page_config(
-    page_title="英語單字學習程式",
+    page_title="多益單字學習",
     page_icon="📚",
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -16,8 +16,8 @@ st.markdown("""
     .block-container {
         padding-top: 0.2rem !important;
         padding-bottom: 0.2rem !important;
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
+        padding-left: 0.4rem !important;
+        padding-right: 0.4rem !important;
     }
     
     /* 頂部跳轉控制區微調 */
@@ -36,7 +36,7 @@ st.markdown("""
 
     /* 獨立設定：英文單字 */
     .main-word {
-        font-size: 1.8rem;
+        font-size: 2.0rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
