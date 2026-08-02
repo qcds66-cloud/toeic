@@ -176,8 +176,6 @@ if 'index' not in st.session_state:
     st.session_state.index = 0
 if 'show_answer' not in st.session_state:
     st.session_state.show_answer = False
-if 'start_no' not in st.session_state:
-    st.session_state.start_no = 1
 
 # --- 5. 語音生成函數 ---
 def get_audio_bytes(text):
@@ -190,16 +188,18 @@ def get_audio_bytes(text):
     except Exception:
         return None
 
-# --- 6. 介面佈局 ---
-col_s1, col_s2 = st.columns([2, 1])
+# --- 6. 介面佈局 (將起始編號與跳轉按鈕並排在同一行) ---
+col_s1, col_s2, col_s3 = st.columns([2, 2, 1])
 with col_s1:
-    start_input = st.number_input("起始編號：", min_value=1, max_value=len(verb_db), value=st.session_state.start_no, label_visibility="collapsed")
+    start_input = st.number_input("跳至編號：", min_value=1, max_value=len(verb_db), value=st.session_state.index + 1)
 with col_s2:
-    if st.button("設定/重置"):
+    st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True) # 調整對齊
+    if st.button("跳轉"):
         st.session_state.index = int(start_input) - 1
-        st.session_state.start_no = int(start_input)
         st.session_state.show_answer = False
         st.rerun()
+with col_s3:
+    pass
 
 st.markdown("---")
 
@@ -226,7 +226,7 @@ if st.session_state.show_answer:
 
 st.markdown("---")
 
-# 調整按鈕佈局：若尚未顯示答案，按鈕佔滿整行；若已顯示答案，則分左右各半
+# 底部按鈕設定：未顯示答案時顯示「顯示答案」；顯示答案後顯示「重新播放」與「下一題」
 if not st.session_state.show_answer:
     if st.button("👁️ 顯示答案", type="primary"):
         st.session_state.show_answer = True
