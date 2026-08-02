@@ -60,7 +60,7 @@ st.markdown("""
 
     /* 獨立設定：中文意思 */
     .mean-text {
-        font-size: 1.2rem;
+        font-size: 1.8rem;
         font-weight: bold;
         color: #FFAB91;
         text-align: center;
