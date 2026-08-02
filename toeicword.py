@@ -36,7 +36,7 @@ st.markdown("""
 
     /* 獨立設定：英文單字 (放大 25%，從 2.5rem 改為 3.125rem) */
     .main-word {
-        font-size: 3.125rem;
+        font-size: 2.5rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
@@ -60,7 +60,7 @@ st.markdown("""
 
     /* 獨立設定：中文意思 (放大 25%，從 1.8rem 改為 2.25rem) */
     .mean-text {
-        font-size: 2.25rem;
+        font-size: 2.0rem;
         font-weight: bold;
         color: #FFAB91;
         text-align: center;
@@ -75,14 +75,14 @@ st.markdown("""
         border-radius: 6px;
         text-align: left;
         color: #CFD8DC;
-        font-size: 1.0625rem;
+        font-size: 0.9rem;
         margin-bottom: 4px !important;
         line-height: 1.15;
     }
 
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
-        width: 100%;
+        width: 200%;
         height: 3.0rem;
         font-size: 2.7rem;
         font-weight: bold;
@@ -109,7 +109,7 @@ st.markdown("""
         color: #000000 !important;
         width: 300% !important;
         height: 2.4rem !important;
-        font-size: 1.1rem !important;
+        font-size: 1.2rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
