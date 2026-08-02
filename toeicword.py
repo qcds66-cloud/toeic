@@ -55,7 +55,7 @@ st.markdown("""
         font-size: 0.95rem;
         color: #B0BEC5;
         text-align: center;
-        margin-bottom: 2px !important;
+        margin-bottom: 5px !important;
     }
 
     /* 獨立設定：中文意思 */
