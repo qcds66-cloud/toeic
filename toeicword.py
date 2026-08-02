@@ -1,16 +1,17 @@
 import streamlit as st
 import os
 from gtts import gTTS
+from io import BytesIO
 
 # --- 1. 頁面基本設定 ---
 st.set_page_config(
-    page_title="英語單字學習程式",
+    page_title="單字學習程式",
     page_icon="📚",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. 自訂 CSS 樣式 (針對行動裝置優化) ---
+# --- 2. 自訂 CSS 樣式 (針對手機與平板優化) ---
 st.markdown("""
     <style>
     .main-word {
@@ -44,7 +45,7 @@ st.markdown("""
     }
     .stButton>button {
         width: 100%;
-        height: 3em;
+        height: 3.2em;
         font-size: 1.2rem;
         font-weight: bold;
         border-radius: 8px;
@@ -166,16 +167,14 @@ if 'show_answer' not in st.session_state:
 if 'start_no' not in st.session_state:
     st.session_state.start_no = 1
 
-# --- 5. 語音生成函數 ---
+# --- 5. 語音生成函數 (轉為 bytes 供自動播放) ---
 def get_audio_bytes(text):
     try:
         tts = gTTS(text=text, lang='en')
-        audio_path = "temp_audio.mp3"
-        tts.save(audio_path)
-        with open(audio_path, "rb") as f:
-            audio_bytes = f.read()
-        os.remove(audio_path)
-        return audio_bytes
+        fp = BytesIO()
+        tts.write_to_fp(fp)
+        fp.seek(0)
+        return fp.read()
     except Exception:
         return None
 
@@ -206,10 +205,10 @@ st.markdown(f"**目前進度：第 {no} 筆 / 共 {len(verb_db)} 筆**")
 # 顯示英文單字
 st.markdown(f'<div class="main-word">{word}</div>', unsafe_allow_html=True)
 
-# 語音播放按鈕
-audio_data = get_audio_bytes(word)
-if audio_data:
-    st.audio(audio_data, format='audio/mp3')
+# 🔊 自動朗讀單字 (加入 autoplay=True 屬性)
+audio_bytes = get_audio_bytes(word)
+if audio_bytes:
+    st.audio(audio_bytes, format='audio/mp3', autoplay=True)
 
 # 顯示答案區塊
 if st.session_state.show_answer:
@@ -224,7 +223,7 @@ if st.session_state.show_answer:
 
 st.markdown("---")
 
-# 按鈕互動區塊 (使用手機友好的滿版按鈕排列)
+# 按鈕互動區塊 (手機友好的滿版按鈕排列)
 c1, c2 = st.columns(2)
 
 with c1:
