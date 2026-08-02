@@ -47,7 +47,7 @@ st.markdown("""
     /* 獨立設定：語音播放條上下的間距縮小，使內容緊湊 */
     .audio-spacing {
         margin-top: 8px !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 10px !important;
     }
 
     /* 獨立設定：詞性 (n., v. 等) */
