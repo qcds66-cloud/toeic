@@ -82,7 +82,7 @@ st.markdown("""
 
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
-        width: 300%;
+        width: 100%;
         height: 3.0rem;
         font-size: 2.7rem;
         font-weight: bold;
@@ -102,11 +102,17 @@ st.markdown("""
         color: #000000 !important;
     }
 
-    /* 將「跳轉」按鍵背景色改為淺綠色 */
+    /* 將「跳轉」按鍵背景色改為淺綠色，並調整文字樣式使其置中 */
     div.stButton > button:not([kind="primary"]) {
         background-color: #a5d6a7 !important;
         border-color: #a5d6a7 !important;
         color: #000000 !important;
+        width: 100% !important;
+        height: 2.4rem !important;
+        font-size: 1.1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     div.stButton > button:not([kind="primary"]):hover {
         background-color: #81c784 !important;
@@ -804,7 +810,7 @@ verb_db = [
     ["679", "resolve", "(v.)", "解決", "We need to resolve the issue before it escalates further.", "我們需要在問題變得更嚴重之前解決它。"],
     ["680", "evaluate", "(v.)", "評估;估值", "The manager will evaluate the performance of the employees.", "經理將評估員工的表現。"],
     ["681", "specify", "(v.)", "明確指出", "Please specify the color you want for your new car.", "請指定您想要的新車顏色。"],
-    ["682", "collaborate", "(v.)", "合作", "We collaborate with our partners to develop new products.", "我們與合作夥伴共同開發新製品。"],
+    ["682", "collaborate", "(v.)", "合作", "We collaborate with our partners to develop new products.", "我們與合作夥伴共同開發新產品。"],
     ["683", "analyze", "(v.)", "分析", "We'll take the problem apart and analyze it in great detail.", "我們會把這個問題拆開並進行非常詳細的分析。"],
     ["684", "suspend", "(v.)", "中止;暫停", "The ferry service was suspended due to bad weather.", "因為天氣惡劣,渡輪已經停開。"],
     ["685", "justify", "(v.)", "證明…………正當", "He provided evidence to justify his actions.", "他拿出證據以證明他的行為是正當的。"],
