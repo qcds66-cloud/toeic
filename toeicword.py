@@ -27,8 +27,8 @@ st.markdown("""
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
-        margin-bottom: 2px !important;
-        line-height: 1.1;
+        margin-bottom: 1px !important;
+        line-height: 1;
     }
     .pos-text {
         font-size: 1.1rem;
