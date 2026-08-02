@@ -34,9 +34,9 @@ st.markdown("""
         margin-bottom: 4px !important;
     }
 
-    /* 獨立設定：英文單字 */
+    /* 獨立設定：英文單字 (放大 25%，從 2.5rem 改為 3.125rem) */
     .main-word {
-        font-size: 2.5rem;
+        font-size: 3.125rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
@@ -58,9 +58,9 @@ st.markdown("""
         margin-bottom: 5px !important;
     }
 
-    /* 獨立設定：中文意思 */
+    /* 獨立設定：中文意思 (放大 25%，從 1.8rem 改為 2.25rem) */
     .mean-text {
-        font-size: 1.8rem;
+        font-size: 2.25rem;
         font-weight: bold;
         color: #FFAB91;
         text-align: center;
@@ -68,14 +68,14 @@ st.markdown("""
         line-height: 1.1;
     }
 
-    /* 獨立設定：例句與翻譯區塊 */
+    /* 獨立設定：例句與翻譯區塊 (放大 25%，從 0.85rem 改為 1.0625rem) */
     .sentence-box {
         background-color: #1E1E1E;
         padding: 6px 8px;
         border-radius: 6px;
         text-align: left;
         color: #CFD8DC;
-        font-size: 0.85rem;
+        font-size: 1.0625rem;
         margin-bottom: 4px !important;
         line-height: 1.15;
     }
@@ -102,17 +102,19 @@ st.markdown("""
         color: #000000 !important;
     }
 
-    /* 將「跳轉」按鍵背景色改為淺綠色，並調整文字樣式使其置中 */
+    /* 將「跳轉」按鍵加寬 200%（寬度放大三倍）、高度微調、文字置中 */
     div.stButton > button:not([kind="primary"]) {
         background-color: #a5d6a7 !important;
         border-color: #a5d6a7 !important;
         color: #000000 !important;
-        width: 100% !important;
+        width: 300% !important;
         height: 2.4rem !important;
         font-size: 1.1rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        position: relative;
+        left: -100%;
     }
     div.stButton > button:not([kind="primary"]):hover {
         background-color: #81c784 !important;
