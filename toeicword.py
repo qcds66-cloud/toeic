@@ -82,12 +82,12 @@ st.markdown("""
 
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
-        width: 300%;
-        height: 3.8em;
+        width: 350%;
+        height: 2.8em;
         font-size: 2.5rem;
         font-weight: bold;
         border-radius: 10px;
-        padding: 10px;
+        padding: 5px;
     }
 
     hr {
