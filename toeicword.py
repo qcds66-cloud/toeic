@@ -90,6 +90,18 @@ st.markdown("""
         padding: 5px;
     }
 
+    /* 將「顯示答案」按鍵背景色改為淺紅色 */
+    button[kind="primary"] {
+        background-color: #ef9a9a !important;
+        border-color: #ef9a9a !important;
+        color: #000000 !important;
+    }
+    button[kind="primary"]:hover {
+        background-color: #e57373 !important;
+        border-color: #e57373 !important;
+        color: #000000 !important;
+    }
+
     hr {
         margin: 3px 0px !important;
     }
@@ -957,7 +969,7 @@ verb_db = [
     ["856", "syndicate", "(n.)", "聯合組織;企業聯合體(v.)使聯合", "The media syndicate distributed content to various news outlets.", "媒體聯盟將內容分發給各個新聞機構。"],
     ["857", "accountable", "(adj.)", "應負責的;應說明的", "You are accountable only to the managing director.", "你只對常務董事負責。"],
     ["858", "influential", "(adj.)", "有影響力的", "The CEO's influential speech motivated us to work harder.", "執行長富有影響力的演說激勵我們更努力工作。"],
-    ["859", "feasible", "(adj.)", "可行的;行得通的", "The proposed budget cuts appear feasible for implementation.", "提議的預算削減在執行上看來是可行的。"],
+    ["859", "feasible", "(adj.)", "可行的;行得通的", "The proposed budget cuts appear feasible for implementation.", "提議的預算削減 in 執行上看來是可行的。"],
     ["860", "plausible", "(adj.)", "看似合理的", "He tried to come up with a plausible excuse.", "他試圖想出一個看似合理的藉口。"],
     ["861", "prompt", "(adj.)", "迅速的;即時的", "Her prompt response to the email impressed her colleagues.", "她對電子郵件的迅速回應讓同事對她印象深刻。"],
     ["862", "considerable", "(adj.)", "可觀的;相當大的", "There's considerable uncertainty about the company's future.", "公司的未來有很大的不確定性。"],
