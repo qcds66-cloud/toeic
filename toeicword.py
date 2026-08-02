@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. 自訂 CSS 樣式 ---
+# --- 2. 自訂 CSS 樣式 (固定版面高度與內容區域，避免上下跳動) ---
 st.markdown("""
     <style>
     .block-container {
@@ -19,6 +19,15 @@ st.markdown("""
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
     }
+    
+    /* 建立固定高度的顯示容器，確保切換答案時上方文字位置絕對不變 */
+    .fixed-display-container {
+        min-height: 380px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
     .main-word {
         font-size: 2rem;
         font-weight: bold;
@@ -95,7 +104,7 @@ verb_db = [
     ["22", "description", "(n.)", "描述", "The catalog gives a full description of each product.", "目錄中對每件產品都有完整的描述。"],
     ["23", "reminder", "(n.)", "提醒;提示", "This is a friendly reminder that smoking is prohibited.", "友善提醒一下這裡禁菸。"],
     ["24", "goods", "(n.)", "商品;貨物", "The store sells various goods, including clothing.", "這家商店出售包括服裝在內的各種商品。"],
-    ["25", "flight", "(n.)", "班機;航程", "I booked a flight to London for next week.", "I訂了下週飛往倫敦的機票。"],
+    ["25", "flight", "(n.)", "班機;航程", "I booked a flight to London for next week.", "我訂了下週飛往倫敦的機票。"],
     ["26", "brand", "(n.)", "品牌", "The advertisement effectively promoted the brand.", "那支廣告替該品牌做了有效的宣傳。"],
     ["27", "vehicle", "(n.)", "車輛;交通工具", "The road is closed to all vehicles. We'll need to walk.", "道路對所有車輛關閉。我們需要步行前往。"],
     ["28", "site", "(n.)", "地點;場所", "The construction site is located downtown.", "施工地點位於市中心。"],
@@ -194,7 +203,6 @@ def get_audio_bytes(text):
 
 # --- 6. 介面佈局 ---
 max_len = len(verb_db)
-# 確保當前數值不超過最大值，避免報錯
 current_val = min(st.session_state.index + 1, max_len)
 
 col_s1, col_s2, col_s3 = st.columns([2, 2, 1])
@@ -216,9 +224,11 @@ no, word, pos, mean, sen_en, sen_zh = current_data
 
 st.markdown(f"**進度：{no} / {max_len} 筆**")
 
+# 使用固定容器包覆主要內容，防止答案展開時把上方元素推移位
+st.markdown('<div class="fixed-display-container">', unsafe_allow_html=True)
+
 st.markdown(f'<div class="main-word">{word}</div>', unsafe_allow_html=True)
 
-# 增加單字與語音播放條的間距（約 2 倍）
 st.markdown('<div class="audio-spacing"></div>', unsafe_allow_html=True)
 
 audio_bytes = get_audio_bytes(word)
@@ -235,9 +245,11 @@ if st.session_state.show_answer:
         </div>
     """, unsafe_allow_html=True)
 
+st.markdown('</div>', unsafe_allow_html=True) # 結束固定容器
+
 st.markdown("---")
 
-# 底部按鍵：置中並加大尺寸
+# 底部按鍵：固定位置，置中並加大尺寸
 if not st.session_state.show_answer:
     col_empty1, col_center, col_empty2 = st.columns([1, 4, 1])
     with col_center:
