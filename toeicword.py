@@ -14,15 +14,19 @@ st.set_page_config(
 st.markdown("""
     <style>
     .block-container {
-        padding-top: 0.2rem !important;
-        padding-bottom: 0.2rem !important;
+        padding-top: 0.1rem !important;
+        padding-bottom: 0.1rem !important;
         padding-left: 0.4rem !important;
         padding-right: 0.4rem !important;
     }
     
-    /* 頂部控制區微調 */
+    /* 頂部控制區微調：朗讀單字及朗讀句子按鍵行距縮小 50% */
     div.stNumberInput, div.stButton {
         margin-bottom: -15px !important;
+    }
+    div.stCheckbox {
+        margin-top: -8px !important;
+        margin-bottom: -18px !important;
     }
 
     /* 獨立設定：進度顯示 */
@@ -30,24 +34,24 @@ st.markdown("""
         font-size: 0.9rem;
         color: #90A4AE;
         text-align: center;
-        margin-top: 2px !important;
-        margin-bottom: 4px !important;
+        margin-top: 1px !important;
+        margin-bottom: 2px !important;
     }
 
-    /* 獨立設定：英文單字 (放大 25%，從 2.5rem 改為 3.125rem) */
+    /* 獨立設定：英文單字 (放大 25%，從 2.5rem 改為 3.125rem；間距縮小 20%) */
     .main-word {
         font-size: 3.125rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
         margin-bottom: 0px !important;
-        line-height: 1.1;
+        line-height: 0.88;
     }
 
     /* 獨立設定：語音播放條上下的間距縮小，使內容緊湊 */
     .audio-spacing {
-        margin-top: 8px !important;
-        margin-bottom: 10px !important;
+        margin-top: 4px !important;
+        margin-bottom: 6px !important;
     }
 
     /* 獨立設定：中文意思與詞性區塊 (放大 25%，從 1.8rem 改為 2.25rem) */
@@ -85,8 +89,8 @@ st.markdown("""
 
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
-        width: 100%;
-        height: 3.0rem;
+        width: 200%;
+        height: 2.5rem;
         font-size: 2.7rem;
         font-weight: bold;
         border-radius: 10px;
@@ -126,7 +130,7 @@ st.markdown("""
     }
 
     hr {
-        margin: 3px 0px !important;
+        margin: 2px 0px !important;
     }
     </style>
 """, unsafe_allow_html=True)
