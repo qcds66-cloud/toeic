@@ -40,7 +40,7 @@ st.markdown("""
 
     /* 獨立設定：英文單字 (放大 25%，從 2.5rem 改為 3.125rem；間距縮小 20%) */
     .main-word {
-        font-size: 3.125rem;
+        font-size: 2.5rem;
         font-weight: bold;
         color: #90CAF9;
         text-align: center;
@@ -51,7 +51,7 @@ st.markdown("""
     /* 獨立設定：語音播放條上下的間距縮小，使內容緊湊 */
     .audio-spacing {
         margin-top: 4px !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 3px !important;
     }
 
     /* 獨立設定：中文意思與詞性區塊 (放大 25%，從 1.8rem 改為 2.25rem) */
@@ -61,14 +61,32 @@ st.markdown("""
         line-height: 1.1;
     }
 
-    .mean-text {
+    .mean-text-hidden {
+        font-size: 2.25rem;
+        font-weight: bold;
+        color: #FFAB91;
+        background-color: #FFAB91;
+        display: inline;
+        user-select: none;
+    }
+
+    .mean-text-visible {
         font-size: 2.25rem;
         font-weight: bold;
         color: #FFAB91;
         display: inline;
     }
 
-    .pos-inline {
+    .pos-inline-hidden {
+        font-size: 1.5rem;
+        color: #B0BEC5;
+        background-color: #B0BEC5;
+        display: inline;
+        margin-left: 10px;
+        user-select: none;
+    }
+
+    .pos-inline-visible {
         font-size: 1.5rem;
         color: #B0BEC5;
         display: inline;
@@ -76,12 +94,24 @@ st.markdown("""
     }
 
     /* 獨立設定：例句與翻譯區塊 (放大 25%，從 0.85rem 改為 1.0625rem) */
-    .sentence-box {
+    .sentence-box-hidden {
         background-color: #1E1E1E;
+        color: #1E1E1E;
         padding: 6px 8px;
         border-radius: 6px;
         text-align: left;
+        font-size: 1.0625rem;
+        margin-bottom: 4px !important;
+        line-height: 1.15;
+        user-select: none;
+    }
+
+    .sentence-box-visible {
+        background-color: #1E1E1E;
         color: #CFD8DC;
+        padding: 6px 8px;
+        border-radius: 6px;
+        text-align: left;
         font-size: 1.0625rem;
         margin-bottom: 4px !important;
         line-height: 1.15;
@@ -89,9 +119,9 @@ st.markdown("""
 
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
-        width: 200%;
+        width: 250%;
         height: 2.5rem;
-        font-size: 2.7rem;
+        font-size: 2.3rem;
         font-weight: bold;
         border-radius: 10px;
         padding: 5px;
@@ -634,7 +664,7 @@ verb_db = [
     ["494", "guarantee", "(v.)", "保證;保固(n.)保證;保固", "The company guarantees the quality of their products.", "公司對其產品的品質掛保證。"],
     ["495", "register", "(v.)", "登記;報名;註冊(n.)收銀機", "Please go to the front desk to register for the workshop.", "請到櫃檯報名工作坊。"],
     ["496", "lease", "(v.)", "租用;租借(n.)租約", "I decided to lease the car instead of purchasing it.", "我決定租賃這輛車,而不是購買它。"],
-    ["497", "feature", "(v.)", "以 為特色(n.)功能;特色;專題文章(或節目)", "Our classes feature hands-on and interactive activities.", "我們的課程以實作及互動的活動為特色。"],
+    ["497", "feature", "(v.)", "以 為特色(n.)功能;特色;專題文章(or節目)", "Our classes feature hands-on and interactive activities.", "我們的課程以實作及互動的活動為特色。"],
     ["498", "default", "(v.)", "違約;拖欠(n.)預設值;違約;拖欠", "The settings will return to default after the update.", "設定將在更新後回復為預設值。"],
     ["499", "sponsor", "(v.)", "贊助;資助(n.)贊助;資助", "The company will sponsor the upcoming event.", "公司將贊助即將到來的活動。"],
     ["500", "malfunction", "(v.)", "故障;失靈(n.)故障;失靈", "The printer began to malfunction during the meeting.", "印表機在會議期間開始故障。"],
@@ -1197,27 +1227,37 @@ if st.session_state.play_word_audio:
     if audio_bytes:
         st.audio(audio_bytes, format='audio/mp3', autoplay=True)
 
-# 答案內容（中文意思與詞性放在同一行顯示）
-if st.session_state.show_answer:
-    st.markdown(f"""
-        <div class="mean-container">
-            <span class="mean-text">{mean}</span>
-            <span class="pos-inline">{pos}</span>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown(f"""
-        <div class="sentence-box">
-            <b>例句：</b>{sen_en}<br>
-            <b>翻譯：</b>{sen_zh}
-        </div>
-    """, unsafe_allow_html=True)
-    
-    # 根據設定決定是否朗讀例句
-    if st.session_state.play_sentence_audio:
-        sen_audio_bytes = get_audio_bytes(sen_en)
-        if sen_audio_bytes:
-            st.audio(sen_audio_bytes, format='audio/mp3', autoplay=True)
+# 根據是否顯示答案，動態切換樣式類別（未顯示時字體與底色相同呈隱藏狀態，顯示時變回可閱讀顏色）
+if not st.session_state.show_answer:
+    mean_class = "mean-text-hidden"
+    pos_class = "pos-inline-hidden"
+    sen_class = "sentence-box-hidden"
+else:
+    mean_class = "mean-text-visible"
+    pos_class = "pos-inline-visible"
+    sen_class = "sentence-box-visible"
+
+# 渲染中文意思與詞性區塊
+st.markdown(f"""
+    <div class="mean-container">
+        <span class="{mean_class}">{mean}</span>
+        <span class="{pos_class}">{pos}</span>
+    </div>
+""", unsafe_allow_html=True)
+
+# 渲染例句與翻譯區塊
+st.markdown(f"""
+    <div class="{sen_class}">
+        <b>例句：</b>{sen_en}<br>
+        <b>翻譯：</b>{sen_zh}
+    </div>
+""", unsafe_allow_html=True)
+
+# 如果已顯示答案且開啟朗讀例句，則播放例句語音
+if st.session_state.show_answer and st.session_state.play_sentence_audio:
+    sen_audio_bytes = get_audio_bytes(sen_en)
+    if sen_audio_bytes:
+        st.audio(sen_audio_bytes, format='audio/mp3', autoplay=True)
 
 st.markdown("---")
 
