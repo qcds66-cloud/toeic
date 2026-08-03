@@ -119,7 +119,7 @@ st.markdown("""
 
     /* 獨立設定：按鍵尺寸與樣式 */
     .stButton>button {
-        width: 250%;
+        width: 220%;
         height: 2.5rem;
         font-size: 2.3rem;
         font-weight: bold;
